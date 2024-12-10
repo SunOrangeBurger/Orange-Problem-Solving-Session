@@ -13,7 +13,7 @@ def get_genre_columns(file_path):
     with open(file_path, mode='r', newline='', encoding='utf-8') as file:
         reader = csv.reader(file)
         headers = next(reader)
-        # The genre header starts from the 4th column(third index)
+        #the genre header starts from the 4th column(third index)
         genre_columns = headers[3:]
     return genre_columns
 
@@ -24,7 +24,7 @@ def create_widgets(root, genres):
     instruction_label = tk.Label(root, text="Select your favourite genres", font=("Bold", 16), fg="red")
     instruction_label.pack(padx=10, pady=(10, 5))
     
-    # Frame for genre checkboxes
+    #frame
     checkbox_frame = tk.LabelFrame(root, text="Select Genres")
     checkbox_frame.pack(padx=10, pady=10, fill='x')
     
@@ -35,7 +35,7 @@ def create_widgets(root, genres):
         chk.pack(side='left', padx=5, pady=5)
         genre_vars[genre] = var
     
-    # Frame for action buttons
+    #Frame 
     button_frame = tk.Frame(root)
     button_frame.pack(pady=5)
 
@@ -53,7 +53,7 @@ def create_widgets(root, genres):
     tree.heading('Genres', text='Genres')
     tree.pack(padx=10, pady=10, fill='both', expand=True)
 
-    # Highlight top pick
+    #highlight top pick
     tree.tag_configure('top_pick', background='lightgreen')
 
     return tree
@@ -62,7 +62,7 @@ def recommend(genre_vars, tree, genres):
     selected_genres = [genre for genre, var in genre_vars.items() if var.get()]
     
     if not selected_genres:
-        # If no genres are selected, prepare to show top 5 movies
+        #if no genres are selected, prepare to show top 5 movies
         filtered_movies = []
     else:
         filtered_movies = []
@@ -77,7 +77,7 @@ def recommend(genre_vars, tree, genres):
                 })
 
     if not filtered_movies:
-        # Show top 5 movies based on rating
+        #show top 5 movies based on rating
         top_movies = sorted(
             [
                 {
@@ -93,7 +93,7 @@ def recommend(genre_vars, tree, genres):
         )[:5]
         display_movies(tree, top_movies, top_pick=top_movies[0] if top_movies else None)
     else:
-        # Sort and display the filtered movies
+        #Sort
         sorted_movies = sorted(filtered_movies, key=lambda x: float(x['Rating']), reverse=True)
         display_movies(tree, sorted_movies, top_pick=sorted_movies[0])
 
@@ -104,7 +104,7 @@ def display_movies(tree, movies, top_pick=None):
     for movie in movies:
         tree.insert('', 'end', values=(movie['Title'], movie['Release Year'], movie['Rating'], movie['Genres']))
 
-    # Highlight
+    #highlight
     if top_pick:
         for item in tree.get_children():
             if tree.item(item)['values'][0] == top_pick['Title']:
@@ -112,7 +112,7 @@ def display_movies(tree, movies, top_pick=None):
                 break
 
 def clear_selection(genre_vars, tree):
-    # Resets alll button values to falseererere
+    #resets alll button values to falseererere
     for var in genre_vars.values():
         var.set(False)
 
