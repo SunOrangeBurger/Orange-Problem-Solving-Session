@@ -60,25 +60,24 @@ def create_widgets(root, genres):
 
 def recommend(genre_vars, tree, genres):
     selected_genres = [genre for genre, var in genre_vars.items() if var.get()]
-    if not selected_genres:
-        messagebox.showwarning("No Selection", "Please select at least one genre.")
-        return
-
     
-    filtered_movies = []
-    for movie in data:
-        
-        movie_genres = [genre for genre in genres if movie[genre] == '0']
-        if all(genre in movie_genres for genre in selected_genres):
-            filtered_movies.append({
-                'Title': movie['Title'],
-                'Release Year': movie['Release Year'],
-                'Rating': movie['Rating'],
-                'Genres': ', '.join(movie_genres)
-            })
+    if not selected_genres:
+        # If no genres are selected, prepare to show top 5 movies
+        filtered_movies = []
+    else:
+        filtered_movies = []
+        for movie in data:
+            movie_genres = [genre for genre in genres if movie[genre] == '0']
+            if all(genre in movie_genres for genre in selected_genres):
+                filtered_movies.append({
+                    'Title': movie['Title'],
+                    'Release Year': movie['Release Year'],
+                    'Rating': movie['Rating'],
+                    'Genres': ', '.join(movie_genres)
+                })
 
     if not filtered_movies:
-        # Print top 5
+        # Show top 5 movies based on rating
         top_movies = sorted(
             [
                 {
@@ -94,7 +93,7 @@ def recommend(genre_vars, tree, genres):
         )[:5]
         display_movies(tree, top_movies, top_pick=top_movies[0] if top_movies else None)
     else:
-        # Sort filtered movies
+        # Sort and display the filtered movies
         sorted_movies = sorted(filtered_movies, key=lambda x: float(x['Rating']), reverse=True)
         display_movies(tree, sorted_movies, top_pick=sorted_movies[0])
 
